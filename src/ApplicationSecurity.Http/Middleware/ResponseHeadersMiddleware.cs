@@ -1,14 +1,29 @@
 ﻿namespace ApplicationSecurity.Http.Middleware
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
+    using ApplicationSecurity.Http.Headers;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.Extensions.Primitives;
 
     public class ResponseHeadersMiddleware : IMiddleware
     {
+        private readonly ICollection<AbstractHeader> _headersCollection;
+
+        public ResponseHeadersMiddleware(ReferrerPolicyHeader referrerPolicyHeader)
+        {
+            _headersCollection = new List<AbstractHeader>()
+            {
+                referrerPolicyHeader,
+            };
+        }
+
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            context.Response.Headers.Add("referrer-policy", new StringValues("strict-origin-when-cross-origin"));
+            foreach (var header in _headersCollection)
+            {
+                header.Configure(context);
+            }
+
             await next(context);
         }
     }
