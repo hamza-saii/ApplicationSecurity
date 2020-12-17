@@ -5,13 +5,12 @@ namespace ApplicationSecurity.HttpTests.Middleware
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using ApplicationSecurity.Http.Middleware;
+    using ApplicationSecurity.Http.Extensions;
+    using ApplicationSecurity.Http.Headers;
     using FluentAssertions;
-    using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Xunit;
     using Microsoft.AspNetCore.TestHost;
-    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Primitives;
 
     public class ResponseHeadersMiddlewareTest
@@ -27,18 +26,18 @@ namespace ApplicationSecurity.HttpTests.Middleware
                         .UseTestServer()
                         .ConfigureServices(services =>
                         {
-                            services.AddSingleton<ResponseHeadersMiddleware>();
+                            services.ConfigureSecurityServices();
                         })
                         .Configure(app =>
                         {
-                            app.UseMiddleware<ResponseHeadersMiddleware>();
+                            app.UseSecurityServices();
                         });
                 })
                 .StartAsync();
 
             var exceptedHeaders = new Dictionary<string, string>()
             {
-                ["referrer-policy"] = new StringValues("strict-origin-when-cross-origin"),
+                [SecurityHeaderNames.ReferrerPolicyHeaderName] = new StringValues(ReferrerPolicyValues.NoReferrer.GetDescription()),
             };
 
             // Act
