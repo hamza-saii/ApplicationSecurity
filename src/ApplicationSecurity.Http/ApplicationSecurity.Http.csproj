@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Hamza SAII</Authors>
+    <Company>None</Company>
+    <Description>This package includes all required security header using a middleware</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/hamza-saii/ApplicationSecurity</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/hamza-saii/ApplicationSecurity</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
